@@ -1,8 +1,9 @@
 const Users = require('./../models/user');
 const express = require('express');
 const bcrypt = require('bcrypt');
-const passport = require('passport');
 const jwt = require('jsonwebtoken');
+const passport = require('passport');
+const localStrategy = require('passport-local').Strategy;
 
 module.exports.signup = (req, res) => {
     let userData = req.body.userData;
@@ -29,7 +30,7 @@ module.exports.signup = (req, res) => {
         else {
             Users(user).save((err, response) => {
                 if (err) {
-                    console.log(err )
+                    console.log(err)
                     return res.status(500).json(err);
                 }
                 let token = jwt.sign({ email: user.email}, "testapp");
@@ -43,4 +44,39 @@ module.exports.signup = (req, res) => {
         }
     })
 
+}
+
+module.exports.login = (req, res) => {
+    let email = req.body.userData.email;
+    let password = req.body.userData.password;
+
+    Users.findOne({
+        email
+    },  (err, result) => {
+        if (! result) {
+            res.status(202).json({
+                status: 202,
+                msg: 'Email not registered'
+            })
+        }
+        else {
+            const isValidPasswd = bcrypt.compareSync(password, result.password);
+            if (! isValidPasswd) {
+                res.status(201).json({
+                    status: 201,
+                    msg: 'Invalid password'
+                })
+            }
+            else {
+                let token = jwt.sign({ email: result.email, roles: ['customer'] }, "testapp");
+                result['token'] = token;
+                res.status(200).json({
+                    status : 200,
+                    data: result
+                })
+            }
+        }
+        
+
+    });
 }

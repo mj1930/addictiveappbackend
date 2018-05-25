@@ -4,6 +4,19 @@ const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 const passport = require('passport');
 const localStrategy = require('passport-local').Strategy;
+const nodemailer = require('nodemailer');
+const smtpTransport = require('nodemailer-smtp-transport');
+const config = require('./../config/config')
+
+const transporter = nodemailer.createTransport(smtpTransport({
+ host: 'smtp.gmail.com',
+ secure: false, // secure:true for port 465, secure:false for port 587
+ port: '587',
+ auth: {
+ user: config.gmailUser,
+ pass: config.password
+ }
+}));
 
 module.exports.signup = (req, res) => {
     let userData = req.body.userData;
@@ -16,7 +29,6 @@ module.exports.signup = (req, res) => {
         phone: userData.phone,
         password: userData.password
     }
-    console.log('user email', user.email)
     user['password'] = bcrypt.hashSync(userData['password'], 8);
     Users.findOne({
         email: user.email
@@ -33,7 +45,7 @@ module.exports.signup = (req, res) => {
                     console.log(err)
                     return res.status(500).json(err);
                 }
-                let token = jwt.sign({ email: user.email}, "testapp");
+                let token = jwt.sign({ email: user.email}, config.token);
                 response['token'] = token;
                 return res.status(200).json({
                     data: response,
@@ -68,7 +80,7 @@ module.exports.login = (req, res) => {
                 })
             }
             else {
-                let token = jwt.sign({ email: result.email, roles: ['customer'] }, "testapp");
+                let token = jwt.sign({ email: result.email}, config.token);
                 result['token'] = token;
                 res.status(200).json({
                     status : 200,
@@ -79,4 +91,52 @@ module.exports.login = (req, res) => {
         
 
     });
+}
+
+module.exports.resetpassword = (req, res) => {
+    let email = req.body.email;
+    Users.findOne({
+        email: email,
+        is_deleted: false
+    }, (err, resp) => {
+        if (resp) {
+            let name = resp.fname;
+            const token = jwt.sign({ email: resp.email}, config.token);
+            const url = config.baseURL;
+            resp.resetPasswordToken = token;
+            resp.resetPasswordExpires = Date.now() + 3600000;
+            resp.save((err, respo) => {});
+            html = `Hi ${name},
+                    Your link to reset password is ${url}/reset-password/${token}.
+                    Click or copy link to reset password.`
+            const mailOptions = {
+                from:"Test Email<testmail@gmail.com>",
+                to: email,
+                subject: "Reset password email",
+                html: html
+            }
+            transporter.sendMail(mailOptions, (err, response) => {
+                if (err) {
+                    res.status(201).json({
+                        status : 201,
+                        msg: 'Mail not sent'
+                    })
+                }
+                else {
+                    console.log('sent mail successfully', response);
+                    res.status(200).json({
+                        status : 200,
+                        msg: 'Mail sent succesfully'
+                    })
+                }
+            })
+        }
+        else {
+            console.log('email not found');
+            res.status(200).json({
+                status : 200,
+                msg: 'Email not found'
+            })
+        }
+    })
 }

@@ -41,7 +41,9 @@ const Users = Schema({
     token: {
         type: String,
         default: ''
-    }
+    },
+    resetPasswordToken: String,
+    resetPasswordExpires: Date
 })
 
 module.exports = mongoose.model('users', Users);

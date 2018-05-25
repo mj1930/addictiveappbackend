@@ -9,4 +9,8 @@ loginRouter.post('/signup', (req, res) => {
 loginRouter.post('/login', (req, res) => {
     loginAuth.login(req, res);
 })
+
+loginRouter.post('/reset-password', (req, res) => {
+    loginAuth.resetpassword(req, res);
+})
 module.exports = loginRouter;

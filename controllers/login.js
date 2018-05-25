@@ -105,9 +105,8 @@ module.exports.resetpassword = (req, res) => {
             const url = config.baseURL;
             resp.resetPasswordToken = token;
             resp.save((err, respo) => {});
-            html = `Hi ${name} \n,
-                    Your link to reset password is \n ${url}/reset-password/${token} \n
-                    \n Copy link to reset password.`
+            html = `Hi ${name} <br>,
+                    Your link to reset password is <a href='${url}/#/reset-password/${token}' target="_blank">Click here to change password</a>`
             const mailOptions = {
                 from:"Test Email<testmail@gmail.com>",
                 to: email,

@@ -130,13 +130,15 @@ var AppComponent = /** @class */ (function () {
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_11__login_login_component__ = __webpack_require__("./src/app/login/login.component.ts");
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_12__service_auth_gaurd_service__ = __webpack_require__("./src/app/service/auth-gaurd.service.ts");
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_13__forget_forget_component__ = __webpack_require__("./src/app/forget/forget.component.ts");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_14__resetpassword_resetpassword_component__ = __webpack_require__("./src/app/resetpassword/resetpassword.component.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_14__angular_common__ = __webpack_require__("./node_modules/@angular/common/esm5/common.js");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_15__resetpassword_resetpassword_component__ = __webpack_require__("./src/app/resetpassword/resetpassword.component.ts");
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
     else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
     return c > 3 && r && Object.defineProperty(target, key, r), r;
 };
+
 
 
 
@@ -163,7 +165,7 @@ var AppModule = /** @class */ (function () {
                 __WEBPACK_IMPORTED_MODULE_10__dashboard_dashboard_component__["a" /* DashboardComponent */],
                 __WEBPACK_IMPORTED_MODULE_11__login_login_component__["a" /* LoginComponent */],
                 __WEBPACK_IMPORTED_MODULE_13__forget_forget_component__["a" /* ForgetComponent */],
-                __WEBPACK_IMPORTED_MODULE_14__resetpassword_resetpassword_component__["a" /* ResetpasswordComponent */]
+                __WEBPACK_IMPORTED_MODULE_15__resetpassword_resetpassword_component__["a" /* ResetpasswordComponent */]
             ],
             imports: [
                 __WEBPACK_IMPORTED_MODULE_0__angular_platform_browser__["BrowserModule"],
@@ -174,7 +176,11 @@ var AppModule = /** @class */ (function () {
                 __WEBPACK_IMPORTED_MODULE_6__angular_forms__["ReactiveFormsModule"],
                 __WEBPACK_IMPORTED_MODULE_2__angular_router__["c" /* RouterModule */].forRoot(__WEBPACK_IMPORTED_MODULE_5__app_routes__["a" /* appRoutes */]),
             ],
-            providers: [__WEBPACK_IMPORTED_MODULE_12__service_auth_gaurd_service__["a" /* AuthGaurdService */]],
+            providers: [__WEBPACK_IMPORTED_MODULE_12__service_auth_gaurd_service__["a" /* AuthGaurdService */],
+                {
+                    provide: __WEBPACK_IMPORTED_MODULE_14__angular_common__["g" /* LocationStrategy */],
+                    useClass: __WEBPACK_IMPORTED_MODULE_14__angular_common__["d" /* HashLocationStrategy */]
+                }],
             bootstrap: [__WEBPACK_IMPORTED_MODULE_7__app_component__["a" /* AppComponent */]]
         })
     ], AppModule);

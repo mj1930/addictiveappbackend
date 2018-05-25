@@ -104,11 +104,10 @@ module.exports.resetpassword = (req, res) => {
             const token = jwt.sign({ email: resp.email}, config.token);
             const url = config.baseURL;
             resp.resetPasswordToken = token;
-            resp.resetPasswordExpires = Date.now() + 3600000;
             resp.save((err, respo) => {});
-            html = `Hi ${name},
-                    Your link to reset password is ${url}/reset-password/${token}.
-                    Click or copy link to reset password.`
+            html = `Hi ${name} \n,
+                    Your link to reset password is \n ${url}/reset-password/${token} \n
+                    \n Copy link to reset password.`
             const mailOptions = {
                 from:"Test Email<testmail@gmail.com>",
                 to: email,
@@ -123,7 +122,6 @@ module.exports.resetpassword = (req, res) => {
                     })
                 }
                 else {
-                    console.log('sent mail successfully', response);
                     res.status(200).json({
                         status : 200,
                         msg: 'Mail sent succesfully'
@@ -132,11 +130,40 @@ module.exports.resetpassword = (req, res) => {
             })
         }
         else {
-            console.log('email not found');
-            res.status(200).json({
-                status : 200,
+            res.status(202).json({
+                status : 202,
                 msg: 'Email not found'
             })
+        }
+    })
+}
+
+module.exports.changepassword = (req, res) => {
+    let token = req.body.userData.token;
+    let password = req.body.userData.password;
+    Users.findOne({
+        resetPasswordToken: token
+    }, (err, resp) => {
+        if (resp) {
+            resp['password'] = bcrypt.hashSync(password, 8);
+            resp['resetPasswordToken'] = '';
+            Users(resp).save((err, response) => {
+                if (response) {
+                    let token = jwt.sign({ password: password}, config.token);
+                    response['token'] = token;
+                    return res.status(200).json({
+                        data: response,
+                        status: 200,
+                        msg: 'Password changed successfully'
+                    });
+                }
+            });
+        }
+        else {
+            return res.status(201).json({
+                msg: 'Token has already been used.',
+                status: 201
+            });
         }
     })
 }

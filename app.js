@@ -19,12 +19,12 @@ app.use(cookieParser());
 app.use(cors());
 
 // Point static path to dist
-app.use(express.static(path.join(__dirname, 'dist')));
+app.use(express.static(path.join(__dirname, '')));
 
 // Catch all other routes and return the index file
-app.get('/', (req, res) => {
-  res.sendFile(path.join(__dirname, 'dist/index.html'));
-});
+// app.get('/', (req, res) => {
+//   res.sendFile('app running');
+// });
 
 var allowCrossDomain = function(req, res, next) {
   res.header('Access-Control-Allow-Origin', '*');
@@ -33,6 +33,7 @@ var allowCrossDomain = function(req, res, next) {
   res.header('Access-Control-Allow-Credentials', true);
 
   if ('OPTIONS' == req.method) {
+    console.log('in here')
     res.send(200);
   } else {
     next();

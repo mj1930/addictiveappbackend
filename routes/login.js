@@ -6,6 +6,10 @@ loginRouter.post('/signup', (req, res) => {
     loginAuth.signup(req, res);
 });
 
+loginRouter.post('/register', (req, res) => {
+    loginAuth.registeruser(req, res);
+});
+
 loginRouter.post('/login', (req, res) => {
     loginAuth.login(req, res);
 });

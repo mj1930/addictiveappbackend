@@ -166,3 +166,38 @@ module.exports.changepassword = (req, res) => {
         }
     })
 }
+
+module.exports.registeruser = (req, res) => {
+    let userData = req.body.userData;
+    let user = {
+        name: userData.name,
+        email: userData.email,
+        number: userData.number,
+        course_name: userData.course_name,
+        branch_name: userData.branch_name,
+        course_year: userData.course_year,
+        college_name: userData.college_name   
+    }
+    Users.findOne({
+        email: user.email
+    }, (err, resp) => {
+        if (resp) {
+            res.status(202).json({
+                status: 202,
+                msg: 'Email already exits'
+            })
+        }
+        else {
+            Users(user).save((err, response) => {
+                if (err) {
+                    return res.status(500).json(err);
+                }
+                return res.status(200).json({
+                    data: response,
+                    success: true,
+                    status: 200
+                });
+            })
+        }
+    });
+}

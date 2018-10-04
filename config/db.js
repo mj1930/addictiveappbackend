@@ -3,7 +3,7 @@
  */
 var mongoose = require('mongoose');
 mongoose.Promise = global.Promise;
-mongoose.connect('mongodb://localhost:27017/testapp');
+mongoose.connect('mongodb://13.232.229.255:27017/registeryourself');
 
 
 //check if we are connected successfully or not

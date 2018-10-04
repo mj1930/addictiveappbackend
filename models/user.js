@@ -2,11 +2,7 @@ const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 
 const Users = Schema({
-    fname: {
-        type: String,
-        required: true
-    },
-    lname: {
+    name: {
         type: String,
         required: true
     },
@@ -14,35 +10,30 @@ const Users = Schema({
         type: String,
         required: true
     },
-    password: {
+    number: {
         type: String,
         required: true
     },
-    cname: {
+    course_name: {
         type: String,
         required: true
     },
-    address: {
-        type: String,
-        required: false
-    },
-    phone: {
+    course_year: {
         type: String,
         required: true
     },
-    is_deleted: {
-        type: Boolean,
-        default: false
+    college_name: {
+        type: String,
+        required: true
+    },
+    branch_name: {
+        type: String,
+        required: true
     },
     createdAt: {
         type: Date,
         default: Date.now()
-    },
-    token: {
-        type: String,
-        default: ''
-    },
-    resetPasswordToken: String
+    }
 })
 
 module.exports = mongoose.model('users', Users);
